@@ -20,7 +20,7 @@ bridge = CvBridge()
 
 def main():
     """
-	Extract a topic from a rosbag.
+    Extract a topic from a rosbag.
     """
     parser = argparse.ArgumentParser(description="Extract images from a ROS bag.")
     parser.add_argument("bag_file", help="Input ROS bag.")
@@ -30,6 +30,13 @@ def main():
 
     print "Extract topics from %s into %s" %(args.bag_file, args.base_dir)
 
+    if not os.path.exists(os.path.join(args.base_dir,"image")):
+        os.makedirs(os.path.join(args.base_dir,"image"), mode=0o777)
+    if not os.path.exists(os.path.join(args.base_dir,"depth")):
+        os.makedirs(os.path.join(args.base_dir,"depth"), mode=0o777)
+    if not os.path.exists(os.path.join(args.base_dir,"flow")):
+        os.makedirs(os.path.join(args.base_dir,"flow"), mode=0o777)
+	
     text_image = open(os.path.join(args.base_dir,"image.txt"), 'w')
     text_depth = open(os.path.join(args.base_dir,"depth.txt"), 'w')
     text_flow = open(os.path.join(args.base_dir,"flow.txt"), 'w')
@@ -44,13 +51,6 @@ def main():
     text_imu.write("# timestamp[s] ax ay az wz wy wz\n")
     text_pose.write("# timestamp[s] x y z qx qy qz qw\n")
 
-    if not os.path.exists(os.path.join(args.base_dir,"image")):
-        os.makedirs(os.path.join(args.base_dir,"image"), mode=0o777)
-    if not os.path.exists(os.path.join(args.base_dir,"depth")):
-        os.makedirs(os.path.join(args.base_dir,"depth"), mode=0o777)
-    if not os.path.exists(os.path.join(args.base_dir,"flow")):
-        os.makedirs(os.path.join(args.base_dir,"flow"), mode=0o777)
-	
     for topic, msg, t in bag.read_messages(topics=["/cam0/image_raw", "/cam0/depthmap", "/cam0/events", "/cam0/optic_flow", "/cam0/pose", "/imu"]):
 
         if topic == "/cam0/image_raw":
