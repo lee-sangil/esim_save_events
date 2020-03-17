@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright 2016 Massachusetts Institute of Technology
+# Copyright 2020 Sangil Lee
 
 """
 Extract topics from a rosbag.
