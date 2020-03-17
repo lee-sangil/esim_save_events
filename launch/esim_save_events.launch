@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+
+<arg name="info"	default="/camera_info"/>
+<arg name="image"	default="/cam0/image_raw"/>
+<arg name="depth"	default="/cam0/depthmap"/>
+<arg name="event"	default="/cam0/events"/>
+<arg name="imu"		default="/imu"/>
+<arg name="pose"	default="/pose"/>
+<arg name="flow"	default="/flow_color"/>
+<arg name="setting" default="DAVIS240C.yaml"/>
+<arg name="args"	default=""/>
+
+<!-- display -->
+<node name="image_view" pkg="image_view" type="image_view">
+	<remap from="image" to="dvs_rendering"/>
+</node>
+
+<include file="$(find esim_ros)/launch/esim.launch">
+	<arg name="config" value="$(find esim_ros)/cfg/opengl.conf"/>
+</include>
+
+<node pkg="esim_save_events" name="esim_save_events" type="esim_save_events" args="$(arg args)" output="screen">
+	<remap from="/image" to="$(arg image)"/>
+	<remap from="/depth" to="$(arg depth)"/>
+	<remap from="/flow" to="$(arg flow)"/>
+	<remap from="/event" to="$(arg event)"/>
+	<remap from="/imu" to="$(arg imu)"/>
+	<remap from="/pose" to="$(arg pose)"/>
+</node>
+
+</launch>
